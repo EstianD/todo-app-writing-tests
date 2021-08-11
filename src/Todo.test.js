@@ -65,7 +65,7 @@ test("Test if app can handle duplicate entry notification", () => {
 
 test("Test if the app can delete a entry properly", () => {
   const inputEl = getByTestId("todo-input");
-  const buttonEl = getByTestId("add-todo");
+  const btnAddEl = getByTestId("add-todo");
 
   fireEvent.change(inputEl, {
     target: {
@@ -73,11 +73,35 @@ test("Test if the app can delete a entry properly", () => {
     },
   });
 
-  fireEvent.click(buttonEl);
+  fireEvent.click(btnAddEl);
 
-  const deleteBtnEl = getByTestId("btn-delete");
+  const todoEl = getByTestId("todo");
+  const btnDeleteEl = getByTestId("btn-delete");
 
-  // fireEvent.click(deleteBtnEl)
+  expect(todoEl.textContent).toBe("testing");
+
+  fireEvent.click(btnDeleteEl);
+
+  expect(todoEl).not.toBeInTheDocument();
 });
-// test("Test if the input gets cleared on submit", () => {});
-// test("", () => {});
+test("Test if the input gets cleared on submit", () => {
+  const inputEl = getByTestId("todo-input");
+  const btnAddEl = getByTestId("add-todo");
+
+  fireEvent.change(inputEl, {
+    target: {
+      value: "testing",
+    },
+  });
+
+  fireEvent.click(btnAddEl);
+
+  expect(inputEl.value).toBe("");
+});
+
+test("Test if the error message has the correct stylling", () => {
+  const btnAddEl = getByTestId("add-todo");
+  fireEvent.click(btnAddEl);
+  const errorEl = getByTestId("error");
+  expect(errorEl).toHaveStyle("color: red");
+});
